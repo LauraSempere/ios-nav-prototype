@@ -9,45 +9,38 @@
 import UIKit
 
 class ResultsTableViewController: UITableViewController {
+    
+    let results = ["Estimated Cost": ["$10,000"], "Platforms": ["iOS", "Android"], "Features": ["Gaming", "AR"] ]
+    let resultsKeys = ["Estimated Cost", "Platforms", "Features"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(ResultsTableViewController.goToBeggining))
-        
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: #selector(ResultsTableViewController.goToSavedCalcs))
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    @IBAction func newCalculator(sender: AnyObject) {
+     self.navigationController?.popToRootViewControllerAnimated(true)
+    }
     @IBAction func saveCalcAlert(sender: AnyObject) {
-        let nextController = UIAlertController(title: "Save Current results", message: "Enter a name for the current results", preferredStyle: UIAlertControllerStyle.Alert)
-        nextController.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
-            textField.placeholder = "Name"
-        }
-        
-        //nextController.title = "Hello from Alert"
-        //nextController.message = "How are you?"
-        
-        
-        let okAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.Default){
-            action in
-            self.goToSavedCalcs()
-            //self.dismissViewControllerAnimated(true, completion: nil)
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default){
-            action in self.dismissViewControllerAnimated(true, completion: nil)
-        }
-        
-        
-        nextController.addAction(okAction)
-        nextController.addAction(cancelAction)
-        
-        self.presentViewController(nextController, animated: true, completion: nil)
+//        let nextController = UIAlertController(title: "Save Current results", message: "Enter a name for the current results", preferredStyle: UIAlertControllerStyle.Alert)
+//        nextController.addTextFieldWithConfigurationHandler { (textField: UITextField!) in
+//            textField.placeholder = "Name"
+//        }
+//        
+//        let okAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.Default){
+//            action in
+//            self.goToSavedCalcs()
+//            //self.dismissViewControllerAnimated(true, completion: nil)
+//        }
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default){
+//            action in self.dismissViewControllerAnimated(true, completion: nil)
+//        }
+//        
+//        nextController.addAction(okAction)
+//        nextController.addAction(cancelAction)
+//        
+//        self.presentViewController(nextController, animated: true, completion: nil)
+        goToSavedCalcs()
     }
     
     
@@ -55,10 +48,7 @@ class ResultsTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    func goToBeggining() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
-    }
-
+    
     func goToSavedCalcs(){
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as! UITabBarController
         vc.selectedIndex = 1
@@ -75,60 +65,27 @@ class ResultsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 10
+        return results.count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("resultsCell", forIndexPath: indexPath)
+        // let resultsKeys = Array(results.map { String($0) })
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("estimateCell", forIndexPath: indexPath)
+            cell.backgroundColor = UIColor.cyanColor()
+           //cell.backgroundColor = UIColor(red: 0, green: 0.5922, blue: 0.8275, alpha: 0.6)
+            cell.textLabel?.text = resultsKeys[indexPath.row]
+            cell.detailTextLabel?.text = results[resultsKeys[indexPath.row]]?.joinWithSeparator(", ")
 
-        return cell
+            return cell
+
+        }else{
+            let cell = tableView.dequeueReusableCellWithIdentifier("resultsCell", forIndexPath: indexPath)
+            cell.textLabel!.text = resultsKeys[indexPath.row]
+            cell.detailTextLabel?.text = results[resultsKeys[indexPath.row]]?.joinWithSeparator(", ")
+            return cell
+        }
     }
-
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
